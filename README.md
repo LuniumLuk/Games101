@@ -8,7 +8,7 @@ My Personal Games101 Assignments
 - [x] Assignment1
 - [x] Assignment2 
 - [x] Assignment3 
-- [ ] Assignment4 
+- [x] Assignment4 
 - [ ] Assignment5 
 
 # Compile in MacOS with VSCode
@@ -57,6 +57,11 @@ My Personal Games101 Assignments
 - Fulfill the basic requirement.
 - Implement BONUS task: `getColorBilinear()`
 - Bump mapping and Displacement mapping implemented for Normal mapping (in use) and Height mapping (commented for no height map provided)
+
+## Assignment4
+
+- Fulfill the basic requirement.
+- Implement BONUS task: Bezeir Curve Anti-Aliasing (connect-4 region AA)
 
 # About brew
 
