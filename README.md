@@ -6,7 +6,7 @@ My Personal Games101 Assignments
 
 - [x] Assignment0 
 - [x] Assignment1
-- [ ] Assignment2 
+- [x] Assignment2 
 - [ ] Assignment3 
 
 # Compile in MacOS with VSCode
@@ -44,6 +44,11 @@ My Personal Games101 Assignments
 - Fulfill the basic requirement.
 - Implement BONUS task: `get_rotation()`
 - Additional function: press space to toggle auto rotation
+
+## Assignment1
+
+- Fulfill the basic requirement.
+- Implement BONUS task: 4x Super-Sampling Anti-Aliasing
 
 # About brew
 
