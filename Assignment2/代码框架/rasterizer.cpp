@@ -145,7 +145,7 @@ void rst::rasterizer::rasterize_triangle(const Triangle& t) {
         {  0.25,  0.25, 0 },
     };
 
-    for (int x = x_min; x <= x_max; ++x) for (int y = y_min; y < y_max; ++y) {
+    for (int x = x_min; x <= x_max; ++x) for (int y = y_min; y <= y_max; ++y) {
         // Pixel center point.
         Eigen::Vector3f center_point{x, y, 0};
 

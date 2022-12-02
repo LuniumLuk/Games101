@@ -7,7 +7,9 @@ My Personal Games101 Assignments
 - [x] Assignment0 
 - [x] Assignment1
 - [x] Assignment2 
-- [ ] Assignment3 
+- [x] Assignment3 
+- [ ] Assignment4 
+- [ ] Assignment5 
 
 # Compile in MacOS with VSCode
 
@@ -45,10 +47,16 @@ My Personal Games101 Assignments
 - Implement BONUS task: `get_rotation()`
 - Additional function: press space to toggle auto rotation
 
-## Assignment1
+## Assignment2
 
 - Fulfill the basic requirement.
 - Implement BONUS task: 4x Super-Sampling Anti-Aliasing
+  
+## Assignment3
+
+- Fulfill the basic requirement.
+- Implement BONUS task: `getColorBilinear()`
+- Bump mapping and Displacement mapping implemented for Normal mapping (in use) and Height mapping (commented for no height map provided)
 
 # About brew
 
