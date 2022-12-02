@@ -5,7 +5,7 @@ My Personal Games101 Assignments
 # Progress
 
 - [x] Assignment0 
-- [ ] Assignment1
+- [x] Assignment1
 - [ ] Assignment2 
 - [ ] Assignment3 
 
@@ -28,13 +28,35 @@ My Personal Games101 Assignments
 4. `cmake ..`
 5. `make`
 
-# Modifications
+# Details
 
 ## Assignment0
 
-Add the following two lines in `CMakeLists.txt`:
+- Fulfill the basic requirement.
+- Add the following two lines in `CMakeLists.txt`:
+    ```cmake
+    set(CMAKE_CXX_STANDARD 17)
+    include_directories(/usr/local/include ./include)
+    ```
 
-```cmake
-set(CMAKE_CXX_STANDARD 17)
-include_directories(/usr/local/include ./include)
+## Assignment1
+
+- Fulfill the basic requirement.
+- Implement BONUS task: `get_rotation()`
+- Additional function: press space to toggle auto rotation
+
+# About brew
+
+## Update your brew in case of some warnings
+
+```shell
+brew update && brew upgrade
+```
+
+## Clean up old version packages
+
+You can use `brew cleanup -n` to preview how many space will be freed
+
+```shell
+brew cleanup
 ```
