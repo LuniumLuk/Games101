@@ -9,7 +9,10 @@ My Personal Games101 Assignments
 - [x] Assignment2 
 - [x] Assignment3 
 - [x] Assignment4 
-- [ ] Assignment5 
+- [x] Assignment5 
+- [ ] Assignment6 
+- [ ] Assignment7 
+- [ ] Assignment8 
 
 # Compile in MacOS with VSCode
 
@@ -62,6 +65,10 @@ My Personal Games101 Assignments
 
 - Fulfill the basic requirement.
 - Implement BONUS task: Bezeir Curve Anti-Aliasing (connect-4 region AA)
+
+## Assignment5
+
+- Fulfill the basic requirement.
 
 # About brew
 

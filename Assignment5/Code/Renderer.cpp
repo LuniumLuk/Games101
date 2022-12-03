@@ -228,7 +228,11 @@ void Renderer::Render(const Scene& scene)
             // TODO: Find the x and y positions of the current pixel to get the direction
             // vector that passes through it.
             // Also, don't forget to multiply both of them with the variable *scale*, and
-            // x (horizontal) variable with the *imageAspectRatio*            
+            // x (horizontal) variable with the *imageAspectRatio*      
+            x = (float)i / scene.width * 2.f - 1.f;
+            y = (1.f - (float)j / scene.height) * 2.f - 1.f;
+            x *= scale * imageAspectRatio;
+            y *= scale;
 
             Vector3f dir = Vector3f(x, y, -1); // Don't forget to normalize this direction!
             framebuffer[m++] = castRay(eye_pos, dir, scene, 0);
@@ -241,9 +245,9 @@ void Renderer::Render(const Scene& scene)
     (void)fprintf(fp, "P6\n%d %d\n255\n", scene.width, scene.height);
     for (auto i = 0; i < scene.height * scene.width; ++i) {
         static unsigned char color[3];
-        color[0] = (char)(255 * clamp(0, 1, framebuffer[i].x));
-        color[1] = (char)(255 * clamp(0, 1, framebuffer[i].y));
-        color[2] = (char)(255 * clamp(0, 1, framebuffer[i].z));
+        color[0] = static_cast<unsigned char>(255 * clamp(0, 1, framebuffer[i].x));
+        color[1] = static_cast<unsigned char>(255 * clamp(0, 1, framebuffer[i].y));
+        color[2] = static_cast<unsigned char>(255 * clamp(0, 1, framebuffer[i].z));
         fwrite(color, 1, 3, fp);
     }
     fclose(fp);    

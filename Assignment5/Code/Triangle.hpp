@@ -4,6 +4,8 @@
 
 #include <cstring>
 
+constexpr float M_EPS = 1e-6;
+
 bool rayTriangleIntersect(const Vector3f& v0, const Vector3f& v1, const Vector3f& v2, const Vector3f& orig,
                           const Vector3f& dir, float& tnear, float& u, float& v)
 {
@@ -11,7 +13,62 @@ bool rayTriangleIntersect(const Vector3f& v0, const Vector3f& v1, const Vector3f
     // that's specified bt v0, v1 and v2 intersects with the ray (whose
     // origin is *orig* and direction is *dir*)
     // Also don't forget to update tnear, u and v.
-    return false;
+
+    Vector3f v01 = v1 - v0;
+    Vector3f v12 = v2 - v1;
+    Vector3f v20 = v0 - v2;
+    Vector3f v02 = v2 - v0;
+    Vector3f normal = crossProduct(v01, v02);
+    float denom = dotProduct(normal, normal); 
+    Vector3f N = normalize(normal);
+
+    // 1. determine whether the ray is parellel to the triangle
+    float N_dot_direction = dotProduct(N, dir);
+    if (fabs(N_dot_direction) < M_EPS)
+    {
+        return false;
+    }
+
+    // 2. determin whether the triangle is at opposite direction of the ray
+    float d = -dotProduct(N, v0);
+    float t = -(dotProduct(N, orig) + d) / N_dot_direction;
+    if (t < tnear)
+    {
+        return false;
+    }
+
+    // 3. get the intersection point
+    Vector3f P = orig + t * dir;
+
+    // 4. inside-out test for P
+    Vector3f inside_out_test;
+
+    Vector3f v0P = P - v0;
+    inside_out_test = crossProduct(v01, v0P);
+    if ((v = dotProduct(normal, inside_out_test)) < 0)
+    {
+        return false;
+    }
+
+    Vector3f v1P = P - v1;
+    inside_out_test = crossProduct(v12, v1P);
+    if (dotProduct(normal, inside_out_test) < 0)
+    {
+        return false;
+    }
+
+    Vector3f v2P = P - v2;
+    inside_out_test = crossProduct(v20, v2P);
+    if ((u = dotProduct(normal, inside_out_test)) < 0)
+    {
+        return false;
+    }
+
+    tnear = t;
+    u /= denom;
+    v /= denom;
+
+    return true;
 }
 
 class MeshTriangle : public Object
