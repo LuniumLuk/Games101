@@ -25,6 +25,8 @@ BVHAccel::BVHAccel(std::vector<Object*> p, int maxPrimsInNode,
         hrs, mins, secs);
 }
 
+
+
 BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
 {
     BVHBuildNode* node = new BVHBuildNode();
@@ -76,7 +78,8 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
         }
 
         auto beginning = objects.begin();
-        auto middling = objects.begin() + (objects.size() / 2);
+        // auto middling = objects.begin() + (objects.size() / 2);
+        auto middling = getSAHPartition(objects);
         auto ending = objects.end();
 
         auto leftshapes = std::vector<Object*>(beginning, middling);
@@ -93,6 +96,31 @@ BVHBuildNode* BVHAccel::recursiveBuild(std::vector<Object*> objects)
     return node;
 }
 
+std::vector<Object*>::iterator BVHAccel::getSAHPartition(std::vector<Object*>& objects)
+{
+    std::vector<Object*>::iterator best_pivot;
+    double best_sah = std::numeric_limits<double>::max();
+    
+    for (int i = 1; i < objects.size(); ++i)
+    {
+        Bounds3 bound_a, bound_b;
+        for (int j = 0; j < i; ++j)
+            bound_a = Union(bound_a, objects[j]->getBounds());
+        for (int j = i; j < objects.size(); ++j)
+            bound_b = Union(bound_b, objects[j]->getBounds());
+        
+        double sah = bound_a.SurfaceArea() * i + bound_b.SurfaceArea() * (objects.size() - i);
+        if (sah < best_sah)
+        {
+            best_sah = sah;
+            best_pivot = objects.begin() + i;
+        }
+    }
+
+    return best_pivot;
+}
+
+
 Intersection BVHAccel::Intersect(const Ray& ray) const
 {
     Intersection isect;
@@ -105,5 +133,50 @@ Intersection BVHAccel::Intersect(const Ray& ray) const
 Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
 {
     // TODO Traverse the BVH to find intersection
+    Vector3f invDir = Vector3f(1.f / ray.direction.x,
+                               1.f / ray.direction.y,
+                               1.f / ray.direction.z);
+    // Unused.
+    std::array<int, 3> dirIsNeg = {int(ray.direction.x>0),
+                                   int(ray.direction.y>0),
+                                   int(ray.direction.z>0)};
+    Intersection isect;
+    if (!node->bounds.IntersectP(ray, invDir, dirIsNeg))
+    {
+        return isect;
+    }
 
+    if (node->object) // Leaf node.
+    {
+        isect = node->object->getIntersection(ray);
+        return isect;
+    }
+    else
+    {
+        Intersection isect_left, isect_right;
+        if (node->left)
+            isect_left = getIntersection(node->left, ray);
+        if (node->right)
+            isect_right = getIntersection(node->right, ray);
+
+        if (!isect_left.happened)
+        {
+            return isect_right;
+        }
+        else if (!isect_right.happened)
+        {
+            return isect_left;
+        }
+        else
+        {
+            if (isect_left.distance < isect_right.distance)
+            {
+                return isect_left;
+            }
+            else
+            {
+                return isect_right;
+            }
+        }
+    }
 }

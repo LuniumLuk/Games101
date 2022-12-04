@@ -10,7 +10,7 @@ My Personal Games101 Assignments
 - [x] Assignment3 
 - [x] Assignment4 
 - [x] Assignment5 
-- [ ] Assignment6 
+- [x] Assignment6 
 - [ ] Assignment7 
 - [ ] Assignment8 
 
@@ -69,6 +69,11 @@ My Personal Games101 Assignments
 ## Assignment5
 
 - Fulfill the basic requirement.
+
+## Assignment6
+
+- Fulfill the basic requirement.
+- Implement BONUS task: SAH partioning in constructing BVH
 
 # About brew
 
