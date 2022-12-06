@@ -60,5 +60,63 @@ bool Scene::trace(
 // Implementation of Path Tracing
 Vector3f Scene::castRay(const Ray &ray, int depth) const
 {
+    if (depth >= maxDepth) return Vector3f(0, 0, 0);
     // TO DO Implement Path Tracing Algorithm here
+    auto isect = intersect(ray);
+    if (isect.happened) {
+        if (isect.m->hasEmission()) {
+            return isect.m->getEmission();
+        }
+
+        auto p = isect.coords;
+        auto N = isect.normal;
+        auto wo = -ray.direction;
+
+        auto L_dir = Vector3f(0, 0, 0);
+        Intersection isect_light;
+        float pdf_light;
+        sampleLight(isect_light, pdf_light);
+
+        auto x = isect_light.coords;
+        auto px = x - p;
+        auto ws = px.normalized();
+        auto px2 = dotProduct(px, px);
+        auto dist = sqrtf(px2);
+        auto NN = isect_light.normal;
+        auto emit = isect_light.emit;
+
+        Ray r_light(p, ws);
+        auto isect_block = intersect(r_light);
+        if (isect_block.distance * 1.01f > dist) {
+            L_dir = emit
+                  * isect.m->eval(wo, ws, N)
+                  * std::max(dotProduct(ws, N), 0.f)
+                  * std::max(dotProduct(-ws, NN), 0.f)
+                  / px2
+                  / std::max(pdf_light, 1e-6f);
+        }
+
+        auto L_indir = Vector3f(0, 0, 0);
+        auto rnd = get_random_float();
+        if (rnd > RussianRoulette) {
+            return L_dir + L_indir;
+        }
+
+        auto wi = isect.m->sample(wo, N);
+        auto pdf = isect.m->pdf(wi, wo, N);
+
+        Ray r(p, wi);
+        auto isect_indir = intersect(ray);
+        if (!isect_indir.m->hasEmission()) {
+            L_indir = castRay(r, depth)
+                    * isect.m->eval(wi, wo, N)
+                    * std::max(dotProduct(wi, N), 0.f)
+                    / std::max(pdf, 1e-6f)
+                    / RussianRoulette;
+        }
+        
+        return L_dir + L_indir;
+    }
+
+    return Vector3f(0, 0, 0);
 }

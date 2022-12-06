@@ -2,10 +2,13 @@
 // Created by goksu on 2/25/20.
 //
 
+#include <iostream>
 #include <fstream>
 #include "Scene.hpp"
 #include "Renderer.hpp"
-
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 inline float deg2rad(const float& deg) { return deg * M_PI / 180.0; }
 
@@ -16,6 +19,12 @@ const float EPSILON = 0.00001;
 // framebuffer is saved to a file.
 void Renderer::Render(const Scene& scene)
 {
+#ifdef _OPENMP
+    std::cout << "[INFO] OpenMP max threads: " << omp_get_max_threads() << "\n";
+#else
+    std::cout << "[INFO] No OpenMP support!\n";
+#endif
+
     std::vector<Vector3f> framebuffer(scene.width * scene.height);
 
     float scale = tan(deg2rad(scene.fov * 0.5));
@@ -25,6 +34,9 @@ void Renderer::Render(const Scene& scene)
 
     // change the spp value to change sample ammount
     int spp = 16;
+    // ThreadPool pool(spp);
+    // std::vector<std::future<Vector3f>> results;
+
     std::cout << "SPP: " << spp << "\n";
     for (uint32_t j = 0; j < scene.height; ++j) {
         for (uint32_t i = 0; i < scene.width; ++i) {
@@ -34,9 +46,18 @@ void Renderer::Render(const Scene& scene)
             float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
 
             Vector3f dir = normalize(Vector3f(-x, y, 1));
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
             for (int k = 0; k < spp; k++){
+                // results.push_back(pool.enqueue([&]() {
+                //     return scene.castRay(Ray(eye_pos, dir), 0) / spp; }));
                 framebuffer[m] += scene.castRay(Ray(eye_pos, dir), 0) / spp;  
             }
+            // for (int k = 0; k < spp; k++) {
+            //     framebuffer[m] += results[k].get();
+            // }
+            // results.clear();
             m++;
         }
         UpdateProgress(j / (float)scene.height);

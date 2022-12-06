@@ -11,7 +11,7 @@ My Personal Games101 Assignments
 - [x] Assignment4 
 - [x] Assignment5 
 - [x] Assignment6 
-- [ ] Assignment7 
+- [x] Assignment7 
 - [ ] Assignment8 
 
 # Compile in MacOS with VSCode
@@ -74,6 +74,11 @@ My Personal Games101 Assignments
 
 - Fulfill the basic requirement.
 - Implement BONUS task: SAH partioning in constructing BVH
+
+## Assignment7
+
+- Fulfill the basic requirement.
+- Implement BONUS task: Multi-threads acceleration with OpenMP
 
 # About brew
 
